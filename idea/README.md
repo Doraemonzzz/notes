@@ -1,0 +1,3 @@
+- linear_attn_sparse
+  - 测试各种kernel函数以及head size对于linear attn稀疏性的影响。
+- 
