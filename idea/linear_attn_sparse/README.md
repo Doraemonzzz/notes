@@ -1,10 +1,67 @@
+std=0.1
 
-```
-d: 16, identity: 0.80, softmax: 0.68, x^4: 0.31, kernel exp: 0.92, kernel swish: 0.75, kernel relu: 0.83, kernel elu: 0.80, kernel 1 + elu: 0.98, kernel sin: 0.81, kernel cos: 0.97, kernel exp, k seqlen softmax: 0.97, kernel exp, k feature softmax: 0.92, kernel exp, q seqlen softmax: 0.92, kernel exp, q feature softmax: 0.92, kernel exp, q,k seqlen softmax: 0.92, 
-d: 32, identity: 0.80, softmax: 0.29, x^4: 0.31, kernel exp: 0.73, kernel swish: 0.78, kernel relu: 0.91, kernel elu: 0.79, kernel 1 + elu: 0.98, kernel sin: 0.80, kernel cos: 0.88, kernel exp, k seqlen softmax: 0.90, kernel exp, k feature softmax: 0.77, kernel exp, q seqlen softmax: 0.73, kernel exp, q feature softmax: 0.71, kernel exp, q,k seqlen softmax: 0.71, 
-d: 64, identity: 0.80, softmax: 0.10, x^4: 0.31, kernel exp: 0.51, kernel swish: 0.87, kernel relu: 0.94, kernel elu: 0.80, kernel 1 + elu: 0.98, kernel sin: 0.80, kernel cos: 0.80, kernel exp, k seqlen softmax: 0.70, kernel exp, k feature softmax: 0.55, kernel exp, q seqlen softmax: 0.51, kernel exp, q feature softmax: 0.50, kernel exp, q,k seqlen softmax: 0.50, 
-d: 128, identity: 0.80, softmax: 0.06, x^4: 0.31, kernel exp: 0.23, kernel swish: 0.95, kernel relu: 0.97, kernel elu: 0.86, kernel 1 + elu: 0.99, kernel sin: 0.80, kernel cos: 0.80, kernel exp, k seqlen softmax: 0.42, kernel exp, k feature softmax: 0.29, kernel exp, q seqlen softmax: 0.23, kernel exp, q feature softmax: 0.24, kernel exp, q,k seqlen softmax: 0.24, 
-d: 256, identity: 0.80, softmax: 0.05, x^4: 0.31, kernel exp: 0.12, kernel swish: 0.98, kernel relu: 0.99, kernel elu: 0.95, kernel 1 + elu: 0.99, kernel sin: 0.80, kernel cos: 0.80, kernel exp, k seqlen softmax: 0.22, kernel exp, k feature softmax: 0.17, kernel exp, q seqlen softmax: 0.12, kernel exp, q feature softmax: 0.12, kernel exp, q,k seqlen softmax: 0.12, 
-d: 512, identity: 0.80, softmax: 0.05, x^4: 0.31, kernel exp: 0.09, kernel swish: 0.99, kernel relu: 0.99, kernel elu: 0.98, kernel 1 + elu: 1.00, kernel sin: 0.80, kernel cos: 0.80, kernel exp, k seqlen softmax: 0.13, kernel exp, k feature softmax: 0.11, kernel exp, q seqlen softmax: 0.09, kernel exp, q feature softmax: 0.09, kernel exp, q,k seqlen softmax: 0.09, 
-d: 1024, identity: 0.80, softmax: 0.05, x^4: 0.31, kernel exp: 0.07, kernel swish: 1.00, kernel relu: 1.00, kernel elu: 0.99, kernel 1 + elu: 1.00, kernel sin: 0.80, kernel cos: 0.80, kernel exp, k seqlen softmax: 0.08, kernel exp, k feature softmax: 0.08, kernel exp, q seqlen softmax: 0.07, kernel exp, q feature softmax: 0.07, kernel exp, q,k seqlen softmax: 0.07, 
-```
+| method                              | 16   | 32   | 64   | 128  | 256  | 512  | 1024 | 2048 | 4096 | 8192 |
+|-------------------------------------|------|------|------|------|------|------|------|------|------|------|
+| softmax                             | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.99 | 0.98 | 0.92 | 0.72 |
+| x^4                                 | 0.32 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 |
+| identity                            | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 |
+| q_silu-k_silu                       | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.81 | 0.89 | 0.98 | 1.00 |
+| q_relu-k_relu                       | 0.84 | 0.90 | 0.95 | 0.97 | 0.99 | 0.99 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_elu-k_elu                         | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.85 | 0.95 |
+| q_1+elu-k_1+elu                     | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_sin-k_sin                         | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 |
+| q_cos-k_cos                         | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_exp-k_exp                         | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_exp-k_feature_softmax             | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_exp-k_seqlen_softmax              | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_feature_softmax-k_exp             | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_feature_softmax-k_feature_softmax | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_feature_softmax-k_seqlen_softmax  | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_seqlen_softmax-k_exp              | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_seqlen_softmax-k_feature_softmax  | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_seqlen_softmax-k_seqlen_softmax   | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+
+std=0.5
+| method                              | 16   | 32   | 64   | 128  | 256  | 512  | 1024 | 2048 | 4096 | 8192 |
+|-------------------------------------|------|------|------|------|------|------|------|------|------|------|
+| softmax                             | 0.65 | 0.27 | 0.10 | 0.06 | 0.05 | 0.05 | 0.05 | 0.04 | 0.04 | 0.04 |
+| x^4                                 | 0.32 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 |
+| identity                            | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 |
+| q_silu-k_silu                       | 0.76 | 0.78 | 0.88 | 0.95 | 0.98 | 0.99 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_relu-k_relu                       | 0.84 | 0.90 | 0.95 | 0.97 | 0.99 | 0.99 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_elu-k_elu                         | 0.80 | 0.79 | 0.80 | 0.86 | 0.95 | 0.98 | 0.99 | 1.00 | 1.00 | 1.00 |
+| q_1+elu-k_1+elu                     | 0.98 | 0.98 | 0.98 | 0.99 | 0.99 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_sin-k_sin                         | 0.81 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 |
+| q_cos-k_cos                         | 0.96 | 0.88 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 |
+| q_exp-k_exp                         | 0.89 | 0.74 | 0.48 | 0.21 | 0.12 | 0.09 | 0.07 | 0.06 | 0.05 | nan  |
+| q_exp-k_feature_softmax             | 0.96 | 0.88 | 0.70 | 0.42 | 0.23 | 0.13 | 0.09 | 0.07 | 0.06 | inf  |
+| q_exp-k_seqlen_softmax              | 0.91 | 0.76 | 0.54 | 0.29 | 0.18 | 0.11 | 0.09 | 0.07 | 0.06 | inf  |
+| q_feature_softmax-k_exp             | 0.89 | 0.74 | 0.48 | 0.21 | 0.12 | 0.09 | 0.07 | 0.06 | 0.01 | nan  |
+| q_feature_softmax-k_feature_softmax | 0.96 | 0.88 | 0.70 | 0.42 | 0.23 | 0.13 | 0.09 | 0.07 | 0.06 | 0.05 |
+| q_feature_softmax-k_seqlen_softmax  | 0.91 | 0.76 | 0.54 | 0.29 | 0.18 | 0.11 | 0.09 | 0.07 | 0.06 | 0.05 |
+| q_seqlen_softmax-k_exp              | 0.89 | 0.75 | 0.48 | 0.22 | 0.13 | 0.08 | 0.07 | 0.06 | 0.00 | nan  |
+| q_seqlen_softmax-k_feature_softmax  | 0.96 | 0.90 | 0.71 | 0.44 | 0.24 | 0.14 | 0.10 | 0.08 | 0.07 | 0.06 |
+| q_seqlen_softmax-k_seqlen_softmax   | 0.91 | 0.78 | 0.55 | 0.30 | 0.18 | 0.13 | 0.11 | 0.12 | 0.15 | 0.20 |
+
+std=1
+
+| method                              | 16   | 32   | 64   | 128  | 256  | 512  | 1024 | 2048 | 4096 | 8192 |
+|-------------------------------------|------|------|------|------|------|------|------|------|------|------|
+| softmax                             | 0.05 | 0.05 | 0.05 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 | 0.04 |
+| x^4                                 | 0.32 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 | 0.31 |
+| identity                            | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 |
+| q_silu-k_silu                       | 0.79 | 0.88 | 0.94 | 0.97 | 0.99 | 0.99 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_relu-k_relu                       | 0.84 | 0.90 | 0.95 | 0.97 | 0.99 | 0.99 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_elu-k_elu                         | 0.77 | 0.81 | 0.89 | 0.95 | 0.98 | 0.99 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_1+elu-k_1+elu                     | 0.90 | 0.93 | 0.96 | 0.98 | 0.99 | 0.99 | 1.00 | 1.00 | 1.00 | 1.00 |
+| q_sin-k_sin                         | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 |
+| q_cos-k_cos                         | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 | 0.80 |
+| q_exp-k_exp                         | 0.10 | 0.08 | 0.07 | 0.06 | 0.05 | nan  | nan  | nan  | nan  | nan  |
+| q_exp-k_feature_softmax             | 0.46 | 0.30 | 0.19 | 0.12 | 0.08 | inf  | inf  | nan  | nan  | nan  |
+| q_exp-k_seqlen_softmax              | 0.13 | 0.10 | 0.08 | 0.07 | 0.06 | inf  | inf  | inf  | nan  | nan  |
+| q_feature_softmax-k_exp             | 0.10 | 0.08 | 0.07 | 0.06 | 0.01 | nan  | nan  | nan  | nan  | nan  |
+| q_feature_softmax-k_feature_softmax | 0.46 | 0.30 | 0.19 | 0.12 | 0.08 | 0.06 | 0.05 | 0.05 | inf  | nan  |
+| q_feature_softmax-k_seqlen_softmax  | 0.13 | 0.10 | 0.08 | 0.07 | 0.06 | 0.05 | 0.05 | 0.05 | 0.05 | 0.05 |
+| q_seqlen_softmax-k_exp              | 0.10 | 0.07 | 0.07 | 0.06 | 0.02 | nan  | nan  | nan  | nan  | nan  |
+| q_seqlen_softmax-k_feature_softmax  | 0.47 | 0.31 | 0.18 | 0.12 | 0.09 | 0.07 | 0.06 | 0.06 | 0.05 | 0.05 |
+| q_seqlen_softmax-k_seqlen_softmax   | 0.17 | 0.10 | 0.08 | 0.06 | 0.06 | 0.06 | 0.07 | 0.09 | 0.13 | 0.18 |
