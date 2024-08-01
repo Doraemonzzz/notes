@@ -96,7 +96,7 @@ def test(q, k, c, t=1, need_print=False, name=""):
     
     if need_print:
         # plt.imshow(s.cpu().detach().numpy(), cmap='hot', interpolation='nearest')
-        denorm = torch.sum(s, dim=-1)
+        denorm = torch.sum(s, dim=-1, keepdim=True)
         sns.heatmap((s / denorm).cpu().detach().numpy())
         # plt.savefig(os.path.join(dir_name, f"{method}-{name}.png"))
         plt.savefig(f"{name}-{method}.jpg")
@@ -109,6 +109,7 @@ t_list = range(1, 21)
 d_list = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192]
 std_list = [0.1, 0.5, 1]
 need_print = False
+save_dir = ""
 
 n = 128
 # t_list = [1]
@@ -118,7 +119,7 @@ need_print = True
 
 for std in std_list:
     print(std)
-    title = "method/seqlen,"
+    title = "method/feature_dim,"
 
     res = {}
     for t in t_list:
@@ -128,8 +129,8 @@ for std in std_list:
 
     for d in d_list:
         if need_print:
-            dir = os.path.join(dir_name, f"feature-{d}")
-            os.makedirs(dir, exist_ok=True)
+            save_dir = os.path.join(dir_name, f"feature-{d}")
+            os.makedirs(save_dir, exist_ok=True)
         title += f" {d},"
         x = torch.randn(n, d, device=device) * std
         W1 = torch.randn(d, d, device=device) * std
@@ -138,7 +139,7 @@ for std in std_list:
         q = F.linear(x, W1)
         k = F.linear(x, W2)
         for t in t_list:
-            method, r1, r2 = test(q, k, c, t, need_print, name=os.path.join(dir, f"dim_{d}-std_{std}-n_{n}"))
+            method, r1, r2 = test(q, k, c, t, need_print, name=os.path.join(save_dir, f"dim_{d}-std_{std}-n_{n}"))
             t_dict[t] = method
             res[t][d] = (r1, r2)
 
