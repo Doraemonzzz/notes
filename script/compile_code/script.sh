@@ -1,0 +1,1 @@
+TORCH_LOGS=output_code python test2.py
