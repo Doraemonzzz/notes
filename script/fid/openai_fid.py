@@ -1,0 +1,1 @@
+# python FSQ-pytorch/vector_quants/evaluator/openai_evaluator.py /mnt/iem-nas/home/qinzhen/qinzhen/experiment_generation/fsq/script/sample/val/data.npz /mnt/iem-nas/home/qinzhen/qinzhen/experiment_generation/fsq/script/sample/llamagen/data.npz
