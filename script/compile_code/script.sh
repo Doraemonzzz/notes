@@ -1,0 +1,1 @@
+TORCH_LOGS=graph_code,aot,output_code python test2.py 2>&1 | tee -a test.log
