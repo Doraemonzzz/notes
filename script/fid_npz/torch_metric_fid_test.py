@@ -44,6 +44,7 @@ fid = FrechetInceptionDistance(fid_statistics_file=fid_statistics_file).to(devic
 fid.eval()
 
 data_path1 = "/mnt/iem-nas/home/qinzhen/qinzhen/experiment_generation/fsq/script/sample/val/"
+data_path1 = "/mnt/iem-nas/home/qinzhen/qinzhen/experiment_generation/elm/images_fid_ar/0250000-linearcfg-1.0-t1.0-g256-top1000"
 # tensor(0.2395, device='cuda:0', dtype=torch.float64) tensor(0.0041, device='cuda:0', dtype=torch.float64) tensor(0.2462, device='cuda:0', dtype=torch.float64) tensor(0.0045, device='cuda:0', dtype=torch.float64)
 # tensor(1.6757, device='cuda:0')
 
