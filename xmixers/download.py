@@ -24,8 +24,10 @@ config_df = pd.DataFrame(config_list)
 runs_df = pd.concat([summary_df, config_df], axis=1)
 runs_df['run_name'] = name_list
 
+print(runs_df)
+
 # 保存为 CSV 文件
 # runs_df.to_csv("wandb_project_runs.csv", index=False)
 
 # 保存为 JSON 文件
-runs_df.to_json("wandb_project_runs.json", orient="records")
+# runs_df.to_json("wandb_project_runs.json", orient="records")
