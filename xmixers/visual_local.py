@@ -4,22 +4,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 
-local_dir = "/mnt/iem-nas/home/qinzhen/qinzhen/experiment/nanogpt/wandb"
-files = []
-for dir in os.listdir(local_dir):
-    dir_path = os.path.join(local_dir, dir)
-    if os.path.isdir(dir_path):
-        for file in os.listdir(dir_path):
-            if file.endswith(".wandb"):
-                print(file)
-                files.append(os.path.join(dir_path, file))
-
-
-for file in files:
-    data = pd.read_json(file)
-    print(data.keys())
-    assert False
-
 sns.set_theme()
 
 # 4.3
@@ -46,25 +30,14 @@ output_name = f"method4.2_vs_3_{y_name}".replace("/", "_")
 folder = "v1"
 
 os.makedirs(folder, exist_ok=True)
+        
+# 读取历史记录的 CSV 文件
+df = pd.read_csv("wandb_all_runs_history.csv")
+# 根据 target_run_ids 列表进行过滤
+df = df[df["name"].isin(names)]
 
-for run in runs: 
-    if not y_name in run.summary:
-        continue
-    name = run.name
-    if keyword is not None:
-        if keyword in name:
-            hist = run.history(keys=['iter', y_name])
-            hist['name'] = name
-            hist_list.append(hist)
-    else:
-        if name in names:
-            hist = run.history(keys=['iter', y_name])
-            hist['name'] = name
-            hist_list.append(hist)
-        
-        
-df = pd.concat(hist_list, ignore_index=True)
 df = df.query(f"`{y_name}` != 'NaN'")
+
 df["name"] = df["name"].map(name_map)
 df["iter"] = (df["iter"] / 1000).astype("int32")
 min = df[y_name].min()
