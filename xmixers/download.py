@@ -29,3 +29,20 @@ runs_df['run_name'] = name_list
 
 # 保存为 JSON 文件
 runs_df.to_json("wandb_project_runs.json", orient="records")
+
+
+# # 存储所有历史数据
+# all_history = []
+
+# # 提取每个运行的 history 并添加到列表
+# for run in runs:
+#     history = run.history()
+#     history["run_id"] = run.id  # 添加运行 ID 列，方便区分
+#     all_history.append(history)
+
+# # 合并所有运行的历史数据
+# all_history_df = pd.concat(all_history, ignore_index=True)
+
+# # 保存为 CSV 文件
+# all_history_df.to_csv("wandb_all_runs_history.csv", index=False)
+# print("Saved all runs history to wandb_all_runs_history.csv")
