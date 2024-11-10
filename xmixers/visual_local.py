@@ -179,8 +179,8 @@ names = ["train_xmixers_llama_medium_50b", "llama_train_xmixers_llama_medium_50b
          "gpt_train_xmixers_gpt_medium_50b_init1_token_mixer_init2_scale"]
 y_name = 'val/loss'
 y_name_label = "Validation Loss"
-y_name = 'train/loss'
-y_name_label = "Training Loss"
+# y_name = 'train/loss'
+# y_name_label = "Training Loss"
 x_name_label = "Number of iterations(k)"
 name_map = {
     "train_xmixers_llama_medium_50b": "LLaMA-method2",
@@ -192,11 +192,35 @@ name_map = {
     # "gpt_train_xmixers_gpt_medium_50b_init1_token_mixer_init2": "GPT-sincos-method4.2",
     "gpt_train_xmixers_gpt_medium_50b_init1_token_mixer_init2_scale": "GPT-sincos-method4.2-scale",
 }
-hue_order = ["GPT-method2", "GPT-method3", "GPT-method3-scale", "GPT-method5-scale", "GPT-sincos-method4.2", "GPT-sincos-method4.2-scale", "LLaMA-method2", "LLaMA-method4.2",]
+hue_order = ["GPT-method2", "GPT-method3-scale", "GPT-method5-scale", "GPT-sincos-method4.2-scale", "LLaMA-method2", "LLaMA-method4.2",]
 
 title = "Language Model(350M) loss curve"
 output_name = f"method6_medium_{y_name}".replace("/", "_")
 folder = "v1"
+
+# large
+names = ["train_xmixers_llama_large_50b", 
+         "train_xmixers_gpt_large_lpe_50b", 
+         "gpt_lpe_train_xmixers_gpt_large_lpe_50b_init2_scale",
+         "gpt_train_xmixers_gpt_large_50b_init1_token_mixer_init2_scale",]
+y_name = 'val/loss'
+y_name_label = "Validation Loss"
+y_name = 'train/loss'
+y_name_label = "Training Loss"
+x_name_label = "Number of iterations(k)"
+name_map = {
+    "train_xmixers_llama_large_50b": "LLaMA-method2",
+    "train_xmixers_gpt_large_lpe_50b": "GPT-method2",
+    "gpt_lpe_train_xmixers_gpt_large_lpe_50b_init2_scale": "GPT-method5-scale",
+    "gpt_train_xmixers_gpt_large_50b_init1_token_mixer_init2_scale": "GPT-sincos-method4.2-scale",
+
+}
+hue_order = ["GPT-method2", "GPT-method5-scale", "GPT-sincos-method4.2-scale", "LLaMA-method2",]
+
+title = "Language Model(774M) loss curve"
+output_name = f"method6_large_{y_name}".replace("/", "_")
+folder = "v1"
+
 
 os.makedirs(folder, exist_ok=True)
         
