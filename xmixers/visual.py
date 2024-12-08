@@ -36,8 +36,8 @@ folder = "v1"
 
 # method2
 keyword = "layerinit"
-# y_name = 'val/loss'
-# y_name_label = "Validation Loss"
+y_name = 'val/loss'
+y_name_label = "Validation Loss"
 # y_name = 'train/loss'
 # y_name_label = "Training Loss"
 x_name_label = "Number of iterations(k)"
