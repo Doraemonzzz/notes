@@ -1,0 +1,48 @@
+{
+  "os":  "Linux-5.10.134-008.7.kangaroo.al8.x86_64-x86_64-with-glibc2.35",
+  "python":  "CPython 3.10.16",
+  "startedAt":  "2024-12-29T07:50:14.204326Z",
+  "program":  "/mnt/iem-nas/home/qinzhen/qinzhen/notes/notes/script/hf_trainer/test.py",
+  "codePath":  "script/hf_trainer/test.py",
+  "git":  {
+    "remote":  "git@github.com:Doraemonzzz/notes.git",
+    "commit":  "7e7ad032dad5bdd09db13eab7fe41218fe4a29f0"
+  },
+  "email":  "doraemon_zzz@163.com",
+  "root":  "/mnt/iem-nas/home/qinzhen/qinzhen/notes/notes/script/hf_trainer",
+  "host":  "dsw-4957-7bcbc84585-t5l24",
+  "executable":  "/mnt/iem-cpfs/env/qinzhen/miniconda3/envs/flame/bin/python",
+  "codePathLocal":  "test.py",
+  "cpu_count":  20,
+  "cpu_count_logical":  20,
+  "gpu":  "NVIDIA A800-SXM4-80GB",
+  "gpu_count":  2,
+  "disk":  {
+    "/":  {
+      "total":  "405774528512",
+      "used":  "2158157824"
+    }
+  },
+  "memory":  {
+    "total":  "137438953472"
+  },
+  "cpu":  {
+    "count":  20,
+    "countLogical":  20
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA A800-SXM4-80GB",
+      "memoryTotal":  "85899345920",
+      "cudaCores":  6912,
+      "architecture":  "Ampere"
+    },
+    {
+      "name":  "NVIDIA A800-SXM4-80GB",
+      "memoryTotal":  "85899345920",
+      "cudaCores":  6912,
+      "architecture":  "Ampere"
+    }
+  ],
+  "cudaVersion":  "12.2"
+}
