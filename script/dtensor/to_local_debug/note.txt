@@ -1,0 +1,70 @@
+[XW11, XW12] [W21
+              W22]
+
+-------------------------------- (dtensor) 
+
+dO11 = dO2 * W21' [replicate, shard(-1) -> shard(-1)]
+dO12 = dO2 * W22' [replicate, shard(-1) -> shard(-1)]
+
+dW11 = X' * dO11 [replicate, shard(-1) -> shard(-1)]
+dW12 = X' * dO12 [replicate, shard(-1) -> shard(-1)]
+
+dX1 = dO11 * W11' [shard(-1), shard(0) -> partial]
+dX2 = dO12 * W12' [shard(-1), shard(0) -> partial]
+
+dX = dX1 + dX2 [partial partial -> replicate]
+
+[partial, shar]
+
+redistribute
+Shard(dim) -> Replicate(): all_gather
+Shard(src_dim) -> Shard(dst_dim): all_to_all
+Replicate() -> Shard(dim): local chunking (i.e. torch.chunk)
+Partial() -> Replicate(): all_reduce
+Partial() -> Shard(dim): reduce_scatter
+
+loss = f(XW, Y)
+
+b, d; d, v
+
+-------------------------------- (tensor)
+X: [shard(0) -> local] X1
+W: [replicate -> local] W1
+Y: [shard(0) -> local] Y1
+
+L1 = X1W1 [local]
+prob1 = softmax(L1) [local]
+loss1 = f(prob1, Y1) [local]
+
+dL1 = p1 * L1 [local]
+dX1 = dL1 * W1' [local]
+dW1 = X1' * dL1 [local]
+
+dX1 -> dX: [local -> shard(0)] (dp(2), tp(4))
+dW1 -> dW: [local -> replicate] (dp(2), tp(4))
+
+dW1     (dW1 + dW2 + dW3 + dW4)
+dW2  -> (dW1 + dW2 + dW3 + dW4)
+dW3     (dW1 + dW2 + dW3 + dW4)
+dW4     (dW1 + dW2 + dW3 + dW4)
+
+-------------------------------- (dtensor)
+L = XW [shard(0), replicate -> shard(0)]
+prob [shard(0)]
+loss = f(L, Y) [shard(0), shard(0) -> shard(0)]
+
+dL = p * L [shard(0), shard(0) -> shard(0)]
+dX = dL * W' [shard(0), replicate -> shard(0)]
+dW = X' * dL [shard(1), shard(0) -> partial -> replicate]
+
+-------------------------------- (dp)
+X: shard(0)
+W: replicate
+Y: shard(0)
+
+L = XW [shard(0), replicate -> replicate]
+dL [shard(0)]
+
+dX = dL * W' [shard(0), replicate -> shard(0)]
+dW = X' * dL [shard(1), shard(0) -> replicate]
+
