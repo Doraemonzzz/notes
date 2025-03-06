@@ -6,7 +6,7 @@
 2. Transformer的结构
 3. Transformer/Attention的训练加速
 4. Transformer/Attention的推理加速
-5. 总结
+5. 参考资料
 
 ## 1. 什么是Transformer
 
