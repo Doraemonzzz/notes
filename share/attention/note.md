@@ -2,28 +2,70 @@
 
 ## 目录
 
-1. 什么是Transformer
-2. Transformer的结构
-3. Transformer/Attention的训练加速
-4. Transformer/Attention的推理加速
-5. 参考资料
+1. 什么是语言模型
+2. 什么是Transformer
+3. Transformer的结构
+4. Transformer/Attention的训练加速
+5. Transformer/Attention的推理加速
+6. 参考资料
 
-## 1. 什么是Transformer
+## 1. 什么是语言模型
+
+​语言模型定义如下。 首先，我们将$\mathcal{V}$定义为语言中所有单词的集合。 例如，在构建我们可能拥有的英语语言模型时，我们有：
+
+$$
+\mathcal{V}=\{\text {the}, \text { dog, laughs, saw, barks, cat, } \ldots\}
+$$
+
+一个语言模型由有限集 $\mathcal{V}$ ，以及函数 $p\left(x_1, x_2, \ldots x_n\right)$ 构成，其中：
+
+$$
+\begin{aligned}
+1. & \text{对于任意} \left\langle x_1 \ldots x_n\right\rangle \in \mathcal{V}^{\dagger}, p\left(x_1, \ldots, x_n\right) \geq 0 \\
+2. & \sum_{\left\langle x_1 \ldots x_n\right\rangle \in \mathcal{V}^{\dagger}} p\left(x_1, \ldots, x_n\right)=1.
+\end{aligned}
+$$
+
+因此，$p\left(x_1, \ldots, x_n\right)$ 是定义在 $\mathcal{V}^{\dagger}$ 中句子上的概率分布。
+
+利用条件概率：
+$$
+\begin{aligned}
+&P\left(X_1=x_1, X_2=x_2, \ldots, X_n=x_n\right) \\
+ = &P\left(X_1=x_1\right) P\left(X_2=x_2, \ldots, X_n=x_n \mid X_1=x_1\right) \\
+ =&P\left(X_1=x_1\right) P\left(X_2=x_2 \mid X_1=x_1\right) \cdots P\left(X_n=x_n \mid X_1=x_1, X_2=x_2, \ldots, X_{n-1}=x_{n-1}\right) \\
+ = &P\left(X_1=x_1\right) \prod_{i=2}^n P\left(X_i=x_i \mid X_1=x_1, \ldots, X_{i-1}=x_{i-1}\right) \\
+\triangleq & P\left(X_1=x_1\right) \prod_{i=2}^n P\left(X_i=x_i \mid X_{<i}\right).
+\end{aligned}
+$$
+所以语言模型的核心为建模$P\left(X_i=x_i \mid X_{<i}\right)$。因为其递归形式，所以常用RNN进行建模：
+$$
+\begin{aligned}
+\mathbf{h}_i &= f(\mathbf{h}_{i-1}, x_{i}) \\
+\mathbf{o}_i &= \mathbf x_i \mathbf W_o .
+\end{aligned}
+$$
+但是早期RNN有两个问题：
+1. 长距离依赖问题：RNN难以捕捉长距离依赖关系。
+2. 并行化问题：RNN是序列模型，难以并行化。
+
+Transformer/Attention的出现就是为了解决这两个问题。
+
+## 2. 什么是Transformer
 
 Transformer是一种基于自注意力（Self-Attention）机制的深度学习模型，广泛用于自然语言处理（NLP）和计算机视觉（CV）等任务。相较于传统的RNN和CNN，Transformer能够更高效地建模长距离依赖关系，并具有更好的并行化能力。
 
-### 1.1 输入与输出
+### 2.1 输入与输出
 Transformer的输入通常是一个 **Token 序列**，每个Token是一个整数索引，对应词汇表（Vocabulary）中的某个单词或子词。
 - **输入形状**：$(b, n)$，其中 $b$ 是批量大小（Batch Size），$n$ 是序列长度（Sequence Length）。
 - **嵌入后形状**：$(b, n, d)$，其中 $d$ 是隐藏层维度（Hidden Dimension）。
 - **输出形状**：$(b, n, v)$，其中 $v$ 是词汇表大小（Vocabulary Size），用于预测下一个Token的概率。
 
-## 2. Transformer结构
-
+## 3. Transformer结构
 
 ![](./images/GPT1.png)
 
-### 2.1 经典Transformer架构
+### 3.1 经典Transformer架构(GPT)
 Transformer的基本结构由多个自注意力（Self-Attention）和前馈神经网络（Feedforward Network, FFN）层堆叠而成，典型的GPT架构包括：
 - **Token Embedding**：将离散的文本Token映射到高维连续向量。
     - $\mathbf{O} = \text{Embedding}(\mathbf{X})$；
@@ -44,7 +86,7 @@ Transformer的基本结构由多个自注意力（Self-Attention）和前馈神�
 
 
 
-### 2.3 Llama架构
+### 2.2 Llama架构
 Llama是Meta推出的优化版Transformer，相比GPT，Llama具有以下优化：
 - **Pre-Normalization**：LayerNorm在每个子层（Attention/FFN）之前，而不是之后，提高稳定性。
     - $\mathbf{O} = f(\text{LayerNorm}(\mathbf X)) + \mathbf{X}$；
@@ -58,9 +100,12 @@ Llama是Meta推出的优化版Transformer，相比GPT，Llama具有以下优化�
   \text{GLU}(\mathbf X) = [(\mathbf X \mathbf W_1) \odot \sigma(\mathbf X \mathbf W_2)] \mathbf W_3.
   $$
 
-### 2.4 Causal vs. Non-Causal Attention
+### 2.3 Causal vs. Non-Causal Attention
 
 ![](./images/causal.png)
+
+### 2.4 Encoder vs Decoder
+Encoder和Decoder最主要区别是，Decoder的Attention部分多了Mask，即使用上图的右半部分。由于没有使用Mask，Encoder很难进行生成，一般只用来做理解。而Decoder由于causal特性，所以可以进行生成，对于理解任务，则可以将上下文和问题作为Prompt输入。从这点来说，Decoder
 
 ## 3. Transformer/Attention的训练加速
 
